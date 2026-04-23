@@ -1,28 +1,36 @@
 name: Build and Deploy React App
+
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
+        working-directory: ./athal # Goes into your project folder
         run: npm install
 
       - name: Build the app
+        working-directory: ./athal # Goes into your project folder
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./athal/build # Point to the build folder inside athal
